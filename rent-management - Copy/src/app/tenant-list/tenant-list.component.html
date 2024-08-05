@@ -1,0 +1,43 @@
+<div class="container text-center">
+  <h2>Tenant List</h2>
+  <button class="btn btn-primary mb-3" routerLink="/add">Add Tenant</button>
+  <table class="table table-bordered table-striped">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Mobile</th>
+        <th>Renewal Date</th>
+        <th>Pending Amount</th>
+        <th>Paid Amount</th>
+        <th>Agreement</th>
+        <th>Aadhaar</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let tenant of tenants; let i = index" [ngClass]="{'renewal-due': isRenewalNear(tenant.renewal_date), 'table-secondary': i % 2 !== 0}">
+        <td>
+          <a routerLink="/view/{{ tenant.id }}">{{ tenant.name }}</a>
+        </td>
+        <td>
+          <a [href]="'https://wa.me/' + tenant.mobile" target="_blank" class="whatsapp-link">
+            {{ tenant.mobile }}
+          </a>
+        </td>
+        <td>{{ tenant.renewal_date | date: 'fullDate' }}</td>
+        <td>{{ tenant.pending_amount | currency: 'INR' }}</td>
+        <td>{{ tenant.paid_amount | currency: 'INR' }}</td>
+        <td>
+          <a *ngIf="tenant.agreement_upload" [href]="tenant.agreement_upload" target="_blank">View Agreement</a>
+        </td>
+        <td>
+          <a *ngIf="tenant.aadhar_upload" [href]="tenant.aadhar_upload" target="_blank">View Aadhaar</a>
+        </td>
+        <td>
+          <a [routerLink]="['/edit', tenant.id]" class="btn btn-warning">Edit</a>
+          <button (click)="confirmDelete(tenant.id)" class="btn btn-danger">Delete</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
